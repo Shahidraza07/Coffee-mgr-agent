@@ -14,17 +14,65 @@ from google.genai import types
 # Page Config
 st.set_page_config(page_title="Coffee Shop Monitor", page_icon="☕", layout="wide")
 
-# --- CSS: Sirf GitHub aur Edit (pencil) icons ko hatane ke liye sahi selector ---
-hide_github_edit_style = """
+# --- CSS: GitHub & Edit icons hide + Animated Sidebar Styling ---
+custom_styles = """
     <style>
-    /* Toolbar ke andar se GitHub aur Edit button ko hide karna */
+    /* Toolbar se GitHub aur Edit icons ko hide karna */
     [data-testid="stToolbar"] a[href*="github.com"],
     [data-testid="stToolbar"] button[kind="header"] {
         display: none !important;
     }
+
+    /* Sidebar Animated & Sleek Styling */
+    @keyframes pulseGlow {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(76, 175, 80, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+    }
+
+    .sidebar-card {
+        background: linear-gradient(135deg, #3E2723 0%, #4E342E 100%);
+        padding: 20px;
+        border-radius: 12px;
+        color: #EFEBE9;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        border: 1px solid #6D4C41;
+        margin-bottom: 20px;
+    }
+
+    .sidebar-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #FFF3E0;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .status-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        color: #D7CCC8;
+        margin-top: 10px;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 8px 12px;
+        border-radius: 8px;
+    }
+
+    .live-dot {
+        width: 10px;
+        height: 10px;
+        background-color: #4CAF50;
+        border-radius: 50%;
+        display: inline-block;
+        animation: pulseGlow 2s infinite;
+    }
     </style>
 """
-st.markdown(hide_github_edit_style, unsafe_allow_html=True)
+st.markdown(custom_styles, unsafe_allow_html=True)
 
 SANDBOX_CLI = '/usr/local/gcp/bin/sandbox'
 IS_LOCAL_MODE = not Path(SANDBOX_CLI).exists()
@@ -127,11 +175,22 @@ adk_app = App(name="secure_sandbox_app", root_agent=root_agent)
 runner = Runner(app=adk_app, session_service=InMemorySessionService(), auto_create_session=True)
 
 # ==========================================
-# STREAMLIT UI SETUP
+# STREAMLIT UI SETUP (Animated Sidebar)
 # ==========================================
 
-st.sidebar.title("☕ Coffee Shop Monitor")
-st.sidebar.write("Monitoring spreadsheet & agent status...")
+with st.sidebar:
+    st.markdown("""
+        <div class="sidebar-card">
+            <div class="sidebar-title">☕ Coffee Shop Monitor</div>
+            <div style="font-size: 0.85em; color: #D7CCC8; margin-bottom: 12px;">
+                Advanced Business Analytics & Inventory Control System
+            </div>
+            <div class="status-badge">
+                <span class="live-dot"></span>
+                <span>Live Agent Connected</span>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
 
 st.title("Secure ADK Sandbox Assistant")
 
