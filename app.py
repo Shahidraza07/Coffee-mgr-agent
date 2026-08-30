@@ -14,7 +14,7 @@ from google.genai import types
 # Page Config
 st.set_page_config(page_title="Coffee Shop Monitor", page_icon="☕", layout="wide")
 
-# --- CSS: GitHub & Edit icons hide + Animated Sidebar Styling ---
+# --- CSS: GitHub/Edit hide + Perfect Glowing Pulse Animation ---
 custom_styles = """
     <style>
     /* Toolbar se GitHub aur Edit icons ko hide karna */
@@ -23,52 +23,64 @@ custom_styles = """
         display: none !important;
     }
 
-    /* Sidebar Animated & Sleek Styling */
-    @keyframes pulseGlow {
-        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
-        70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(76, 175, 80, 0); }
-        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
-    }
-
+    /* Sidebar Card Design */
     .sidebar-card {
         background: linear-gradient(135deg, #3E2723 0%, #4E342E 100%);
-        padding: 20px;
-        border-radius: 12px;
+        padding: 22px;
+        border-radius: 14px;
         color: #EFEBE9;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         border: 1px solid #6D4C41;
         margin-bottom: 20px;
     }
 
     .sidebar-title {
-        font-size: 1.2rem;
+        font-size: 1.25rem;
         font-weight: bold;
         color: #FFF3E0;
-        margin-bottom: 8px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+        margin-bottom: 6px;
     }
 
-    .status-badge {
+    /* Pulsing Animation for Green Live Dot */
+    @keyframes livePulse {
+        0% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.9);
+        }
+        70% {
+            transform: scale(1);
+            box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+        }
+        100% {
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+        }
+    }
+
+    .status-container {
         display: flex;
         align-items: center;
-        gap: 8px;
-        font-size: 0.9rem;
-        color: #D7CCC8;
-        margin-top: 10px;
-        background: rgba(0, 0, 0, 0.2);
-        padding: 8px 12px;
+        gap: 10px;
+        margin-top: 14px;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 10px 14px;
         border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .live-dot {
-        width: 10px;
-        height: 10px;
+        width: 12px;
+        height: 12px;
         background-color: #4CAF50;
         border-radius: 50%;
         display: inline-block;
-        animation: pulseGlow 2s infinite;
+        animation: livePulse 1.5s infinite ease-in-out;
+    }
+    
+    .status-text {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #C8E6C9;
     }
     </style>
 """
@@ -175,19 +187,19 @@ adk_app = App(name="secure_sandbox_app", root_agent=root_agent)
 runner = Runner(app=adk_app, session_service=InMemorySessionService(), auto_create_session=True)
 
 # ==========================================
-# STREAMLIT UI SETUP (Animated Sidebar)
+# STREAMLIT UI SETUP (Animated Glowing Sidebar)
 # ==========================================
 
 with st.sidebar:
     st.markdown("""
         <div class="sidebar-card">
             <div class="sidebar-title">☕ Coffee Shop Monitor</div>
-            <div style="font-size: 0.85em; color: #D7CCC8; margin-bottom: 12px;">
+            <div style="font-size: 0.85em; color: #D7CCC8; margin-bottom: 8px; line-height: 1.4;">
                 Advanced Business Analytics & Inventory Control System
             </div>
-            <div class="status-badge">
+            <div class="status-container">
                 <span class="live-dot"></span>
-                <span>Live Agent Connected</span>
+                <span class="status-text">Live Agent Connected</span>
             </div>
         </div>
     """, unsafe_allow_html=True)
