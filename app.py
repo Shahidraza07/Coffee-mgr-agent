@@ -14,11 +14,12 @@ from google.genai import types
 # Page Config
 st.set_page_config(page_title="Coffee Shop Monitor", page_icon="☕", layout="wide")
 
-# --- CSS: Sirf GitHub aur Edit (pencil) icons ko hatane ke liye (Share button aur Menu safe rahenge) ---
+# --- CSS: Sirf GitHub aur Edit (pencil) icons ko hatane ke liye sahi selector ---
 hide_github_edit_style = """
     <style>
-    header [data-testid="stToolbar"] a[href*="github.com"],
-    header [data-testid="stToolbar"] button[aria-label="Edit app"] {
+    /* Toolbar ke andar se GitHub aur Edit button ko hide karna */
+    [data-testid="stToolbar"] a[href*="github.com"],
+    [data-testid="stToolbar"] button[kind="header"] {
         display: none !important;
     }
     </style>
