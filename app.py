@@ -14,6 +14,18 @@ from google.genai import types
 # Page Config
 st.set_page_config(page_title="Coffee Shop Monitor", page_icon="☕", layout="wide")
 
+# --- Sirf upar ke Toolbar se Edit (Pencil) aur GitHub icons ko hatane ke liye CSS ---
+hide_streamlit_style = """
+    <style>
+    /* GitHub icon aur Edit icon ko target karke hide karna */
+    [data-testid="stToolbar"] a[href*="github.com"],
+    [data-testid="stToolbar"] button[kind="header"] {
+        display: none !important;
+    }
+    </style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
 SANDBOX_CLI = '/usr/local/gcp/bin/sandbox'
 IS_LOCAL_MODE = not Path(SANDBOX_CLI).exists()
 
