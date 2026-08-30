@@ -14,7 +14,7 @@ from google.genai import types
 # Page Config
 st.set_page_config(page_title="Coffee Shop Monitor", page_icon="☕", layout="wide")
 
-# --- CSS: GitHub/Edit hide + Perfect Glowing Pulse Animation ---
+# --- CSS: GitHub/Edit hide + Pulsing Status + Animated Coffee Cup in Sidebar ---
 custom_styles = """
     <style>
     /* Toolbar se GitHub aur Edit icons ko hide karna */
@@ -23,7 +23,7 @@ custom_styles = """
         display: none !important;
     }
 
-    /* Sidebar Card Design */
+    /* Sidebar Top Card Design */
     .sidebar-card {
         background: linear-gradient(135deg, #3E2723 0%, #4E342E 100%);
         padding: 22px;
@@ -43,18 +43,9 @@ custom_styles = """
 
     /* Pulsing Animation for Green Live Dot */
     @keyframes livePulse {
-        0% {
-            transform: scale(0.95);
-            box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.9);
-        }
-        70% {
-            transform: scale(1);
-            box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
-        }
-        100% {
-            transform: scale(0.95);
-            box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
-        }
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.9); }
+        70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
     }
 
     .status-container {
@@ -81,6 +72,70 @@ custom_styles = """
         font-size: 0.95rem;
         font-weight: 500;
         color: #C8E6C9;
+    }
+
+    /* Animated Steaming Coffee Cup Card */
+    .coffee-animation-card {
+        background: linear-gradient(135deg, #4E342E 0%, #3E2723 100%);
+        padding: 25px 15px;
+        border-radius: 14px;
+        text-align: center;
+        margin-top: 15px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        border: 1px solid #6D4C41;
+    }
+
+    .cup-body {
+        width: 55px;
+        height: 40px;
+        background: #FFF3E0;
+        border-radius: 0 0 28px 28px;
+        position: relative;
+        margin: 25px auto 10px auto;
+        box-shadow: inset 0 -5px 0 #D7CCC8;
+    }
+
+    .cup-handle {
+        position: absolute;
+        right: -16px;
+        top: 7px;
+        width: 16px;
+        height: 22px;
+        border: 4px solid #FFF3E0;
+        border-left: none;
+        border-radius: 0 12px 12px 0;
+    }
+
+    .steam-container {
+        position: relative;
+        height: 35px;
+        width: 55px;
+        margin: 0 auto;
+    }
+
+    @keyframes riseSteam {
+        0% { transform: translateY(0) scaleX(1); opacity: 0; }
+        50% { opacity: 0.7; }
+        100% { transform: translateY(-28px) scaleX(1.4); opacity: 0; }
+    }
+
+    .steam {
+        position: absolute;
+        background: rgba(255, 243, 224, 0.65);
+        border-radius: 50%;
+        animation: riseSteam 2s infinite ease-out;
+    }
+
+    .steam-1 { width: 5px; height: 16px; left: 16px; animation-delay: 0s; }
+    .steam-2 { width: 7px; height: 20px; left: 24px; animation-delay: 0.6s; }
+    .steam-3 { width: 5px; height: 15px; left: 32px; animation-delay: 1.2s; }
+
+    .sidebar-caption {
+        color: #FFECB3;
+        font-size: 0.9rem;
+        margin-top: 15px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
     }
     </style>
 """
@@ -187,7 +242,7 @@ adk_app = App(name="secure_sandbox_app", root_agent=root_agent)
 runner = Runner(app=adk_app, session_service=InMemorySessionService(), auto_create_session=True)
 
 # ==========================================
-# STREAMLIT UI SETUP (Animated Glowing Sidebar)
+# STREAMLIT UI SETUP (Animated Sidebar & Coffee Graphic)
 # ==========================================
 
 with st.sidebar:
@@ -201,6 +256,18 @@ with st.sidebar:
                 <span class="live-dot"></span>
                 <span class="status-text">Live Agent Connected</span>
             </div>
+        </div>
+
+        <div class="coffee-animation-card">
+            <div class="steam-container">
+                <div class="steam steam-1"></div>
+                <div class="steam steam-2"></div>
+                <div class="steam steam-3"></div>
+            </div>
+            <div class="cup-body">
+                <div class="cup-handle"></div>
+            </div>
+            <div class="sidebar-caption">⚡ Fresh Brew & Analytics</div>
         </div>
     """, unsafe_allow_html=True)
 
