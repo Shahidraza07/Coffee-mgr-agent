@@ -14,16 +14,16 @@ from google.genai import types
 # Page Config
 st.set_page_config(page_title="Coffee Shop Monitor", page_icon="☕", layout="wide")
 
-# --- Sirf GitHub aur Pencil icons ko hatane ke liye CSS ---
-hide_github_pencil_style = """
+# --- CSS: Sirf GitHub aur Edit (pencil) icons ko hatane ke liye (Share button aur Menu safe rahenge) ---
+hide_github_edit_style = """
     <style>
     header [data-testid="stToolbar"] a[href*="github.com"],
-    header [data-testid="stToolbar"] button[kind="header"] {
+    header [data-testid="stToolbar"] button[aria-label="Edit app"] {
         display: none !important;
     }
     </style>
 """
-st.markdown(hide_github_pencil_style, unsafe_allow_html=True)
+st.markdown(hide_github_edit_style, unsafe_allow_html=True)
 
 SANDBOX_CLI = '/usr/local/gcp/bin/sandbox'
 IS_LOCAL_MODE = not Path(SANDBOX_CLI).exists()
