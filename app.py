@@ -14,18 +14,6 @@ from google.genai import types
 # Page Config
 st.set_page_config(page_title="Coffee Shop Monitor", page_icon="☕", layout="wide")
 
-# --- CSS: Sirf Edit (Pencil) aur GitHub icons hide honge, Share button dikhega ---
-hide_streamlit_style = """
-    <style>
-    /* Sirf GitHub aur Edit buttons ko target karna */
-    [data-testid="stToolbar"] a[href*="github.com"],
-    [data-testid="stToolbar"] button[kind="header"]:not([aria-label*="Share"]) {
-        display: none !important;
-    }
-    </style>
-"""
-st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-
 SANDBOX_CLI = '/usr/local/gcp/bin/sandbox'
 IS_LOCAL_MODE = not Path(SANDBOX_CLI).exists()
 
