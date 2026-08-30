@@ -11,8 +11,18 @@ from google.adk import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
 
-# Page Config
-st.set_page_config(page_title="Coffee Shop Monitor", page_icon="☕", layout="wide")
+# Page Config (Layout 'centered' ya 'wide' rakh sakte hain, sidebar hatane ke baad yeh center mein aa jayega)
+st.set_page_config(page_title="Coffee Shop Monitor", page_icon="☕", layout="centered")
+
+# --- Upar ke Pencil, GitHub icons aur Streamlit branding ko hatane ke liye CSS ---
+hide_streamlit_style = """
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    </style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 SANDBOX_CLI = '/usr/local/gcp/bin/sandbox'
 IS_LOCAL_MODE = not Path(SANDBOX_CLI).exists()
@@ -94,27 +104,14 @@ root_agent = Agent(
         f'The Google Spreadsheet ID you are managing is: "{SPREADSHEET_ID}". Use this ID for all sheet operations.\n'
         '1. Comparative Analysis Policy:\n'
         f'   - Ingest historical POS data from the "POS-2025" sheet tab using read_spreadsheet_values with spreadsheet_id="{SPREADSHEET_ID}".\n'
-        '   - Receive the current graduation schedule directly from the manager\'s prompt (the manager will paste it and indicate it is the same schedule sequence as last year).\n'
-        '   - Write a python3 script via the sandbox tool to:\n'
-        '     a. Correlate the 2025 product spikes (Cold Brew, Alt Milk, Extra Espresso) with the specific ceremonies ending at those times.\n'
-        '     b. Map those beverage profiles to the pasted schedule (which is the same sequence) to predict exactly when and where the 2026 spikes will occur.\n'
-        '     c. Identify expected wait-time bottlenecks in 2026 based on the 2025 wait times for those same profiles.\n'
+        '   - Receive the current graduation schedule directly from the manager\'s prompt.\n'
+        '   - Write a python3 script via the sandbox tool to correlate and predict spikes.\n'
         '2. Bottleneck Diagnostics (Playbook):\n'
-        '   - If a predicted high-volume slot in 2026 is expected to have Wait_Time_Minutes > 10:\n'
-        '     - If Cashiers_Working < 2: Recommend scheduling another cashier.\n'
-        '     - If Cashiers_Working == 2 and complex items (Cold Brew, Extra Espresso, Alt Milk) spike: Deduce that the bottleneck is barista output, not cashiers. Recommend adding a "Support Barista" role to handle fulfillment.\n'
+        '   - Analyze wait times and staffing needs.\n'
         '3. Human-in-the-Loop Policy:\n'
-        '   - Present your detailed data discoveries, wait-time bottlenecks, and actionable recommendations (stocking and staffing changes) to the manager.\n'
-        '   - Highlight only two or three findings for specific ceremonies.\n'
-        '   - Frame your recommendations as a clean list of suggested tasks for the manager\'s TODO list.\n'
-        '   - Explicitly ask: "Would you like me to add these tasks to your \'TODO-2026\' TODO list?"\n'
-        '   - Do NOT modify any spreadsheet data until explicit approval is given.\n'
+        '   - Present insights and ask: "Would you like me to add these tasks to your \'TODO-2026\' TODO list?"\n'
         '4. Post-Approval Policy:\n'
-        f'   - Upon receiving explicit user approval, first verify if the "TODO-2026" sheet tab exists in spreadsheet "{SPREADSHEET_ID}".\n'
-        f'   - If the "TODO-2026" sheet tab does not exist, use the tool create_spreadsheet_tab to create it in spreadsheet "{SPREADSHEET_ID}".\n'
-        f'   - Once the tab exists, use update_spreadsheet_values to append the approved adjustments as tasks to the "TODO-2026" sheet tab.\n'
-        '   - Write the rows under the headers: Task (the actionable job, e.g., "Schedule a Support Barista role for Saturday morning"), Category ("Staffing" or "Inventory"), Ceremony, and Date_Added (today\'s date).\n'
-        '   - Always confirm to the user exactly what tasks you have written to their "TODO-2026" TODO list.'
+        '   - Verify/Create "TODO-2026" tab and append approved tasks upon confirmation.'
     ),
     tools=[
         FunctionTool(func=execute_sandbox_command),
@@ -128,13 +125,11 @@ adk_app = App(name="secure_sandbox_app", root_agent=root_agent)
 runner = Runner(app=adk_app, session_service=InMemorySessionService(), auto_create_session=True)
 
 # ==========================================
-# STREAMLIT UI SETUP
+# STREAMLIT UI SETUP (Sidebar Removed, Clean Layout)
 # ==========================================
 
-st.sidebar.title("☕ Coffee Shop Monitor")
-st.sidebar.write("Monitoring spreadsheet & agent status...")
-
-st.title("Secure ADK Sandbox Assistant")
+st.title("☕ Secure ADK Sandbox Assistant")
+st.write("Monitoring spreadsheet & agent status...")
 
 # Initialize chat history in session state
 if "messages" not in st.session_state:
