@@ -11,10 +11,10 @@ from google.adk import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
 
-# Page Config (Layout 'centered' ya 'wide' rakh sakte hain, sidebar hatane ke baad yeh center mein aa jayega)
-st.set_page_config(page_title="Coffee Shop Monitor", page_icon="☕", layout="centered")
+# Page Config (Wide layout wapas kar diya hai)
+st.set_page_config(page_title="Coffee Shop Monitor", page_icon="☕", layout="wide")
 
-# --- Upar ke Pencil, GitHub icons aur Streamlit branding ko hatane ke liye CSS ---
+# --- Sirf upar ke Pencil, GitHub icons aur menu ko hatane ke liye CSS ---
 hide_streamlit_style = """
     <style>
     #MainMenu {visibility: hidden;}
@@ -125,11 +125,13 @@ adk_app = App(name="secure_sandbox_app", root_agent=root_agent)
 runner = Runner(app=adk_app, session_service=InMemorySessionService(), auto_create_session=True)
 
 # ==========================================
-# STREAMLIT UI SETUP (Sidebar Removed, Clean Layout)
+# STREAMLIT UI SETUP (Sidebar Wapas Laga Diya Hai)
 # ==========================================
 
-st.title("☕ Secure ADK Sandbox Assistant")
-st.write("Monitoring spreadsheet & agent status...")
+st.sidebar.title("☕ Coffee Shop Monitor")
+st.sidebar.write("Monitoring spreadsheet & agent status...")
+
+st.title("Secure ADK Sandbox Assistant")
 
 # Initialize chat history in session state
 if "messages" not in st.session_state:
